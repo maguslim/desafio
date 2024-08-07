@@ -195,7 +195,7 @@ def profile_view(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=user)
         profile_form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
-
+        
         if 'remove_picture' in request.POST:
             if user_profile.profile_picture:
                 user_profile.profile_picture.delete(save=False)
@@ -203,6 +203,14 @@ def profile_view(request):
                 user_profile.save()
                 messages.success(request, 'Sua foto de perfil foi removida com sucesso.')
             return redirect('profile')
+
+        if user_form.is_valid():
+            if not user_form.cleaned_data['last_name']:  
+                user_form.cleaned_data['last_name'] = user.last_name
+
+        if profile_form.is_valid():
+            if not profile_form.cleaned_data['phone_number']:  
+                profile_form.cleaned_data['phone_number'] = user_profile.phone_number
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()

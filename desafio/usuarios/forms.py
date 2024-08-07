@@ -69,7 +69,6 @@ class PasswordResetCompleteForm(SetPasswordForm):
     def __init__(self, user, *args, **kwargs):
         if user is None:
             raise ValueError("User is required")
-        # Passa o user para o SetPasswordForm
         super().__init__(user=user, *args, **kwargs)
 
     def clean(self):
@@ -88,9 +87,10 @@ class PasswordResetCompleteForm(SetPasswordForm):
         return cleaned_data
 
     def save(self, commit=True):
-        # Chama o save do SetPasswordForm para atualizar a senha
         return super().save(commit=commit)
 
+
+from django.core.exceptions import ValidationError
 
 class UserProfileForm(forms.ModelForm):
     phone_number = forms.CharField(required=True)
@@ -99,6 +99,11 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ['phone_number', 'profile_picture', 'is_locador']
 
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number is None or phone_number.strip() == '':
+            raise ValidationError('O número de telefone não pode ser vazio.')
+        return phone_number
 
 class UserForm(forms.ModelForm):
     first_name = forms.CharField(required=True)
@@ -108,3 +113,9 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if last_name is None or last_name.strip() == '':
+            raise ValidationError('O último nome não pode ser vazio.')
+        return last_name

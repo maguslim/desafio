@@ -29,36 +29,58 @@ function toggleEditMode() {
     }
 }
 
-// Atualiza a imagem de perfil em tempo real
 document.getElementById('id_profile_picture').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            document.getElementById('profile-picture').src = e.target.result;
+            document.getElementById('profile-picture').src = e.target.result; 
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); 
     }
 });
 
 document.getElementById('id_phone_number').addEventListener('input', function(event) {
-    let value = event.target.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    let value = event.target.value.replace(/\D/g, '');
 
     if (value.length > 11) {
-        value = value.slice(0, 11); // Limita o número de caracteres a 11
+        value = value.slice(0, 11); 
     }
 
     let formattedValue = '';
 
-    // Aplica a formatação conforme o número de caracteres
+
     if (value.length > 6) {
-        formattedValue = `(${value.slice(0, 2)})${value.slice(2, 7)}-${value.slice(7)}`;
+        formattedValue = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
     } else if (value.length > 2) {
-        formattedValue = `(${value.slice(0, 2)})${value.slice(2)}`;
+        formattedValue = `(${value.slice(0, 2)}) ${value.slice(2)}`;
     } else {
         formattedValue = value;
     }
 
-    // Atualiza o valor do input com a formatação aplicada
+
     event.target.value = formattedValue;
+});
+
+
+document.querySelector('form').addEventListener('submit', function(event) {
+    let hasErrors = false;
+
+
+    document.querySelectorAll('.form-control').forEach(control => {
+        if (control.hasAttribute('required') && !control.value) {
+            hasErrors = true;
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'text-danger'; 
+            errorMessage.innerText = `O campo ${control.previousElementSibling.innerText} é obrigatório.`;
+            control.parentNode.appendChild(errorMessage); 
+            control.classList.add('is-invalid'); 
+        } else {
+            control.classList.remove('is-invalid'); 
+        }
+    });
+
+    if (hasErrors) {
+        event.preventDefault();
+    }
 });

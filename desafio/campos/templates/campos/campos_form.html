@@ -1,24 +1,138 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Formulário</title>
     <link rel="stylesheet" href="{% static 'campos/css/campos_form.css' %}" />
-</head>
-<body>
+  </head>
+  <body>
     <h2>
-      {% if form.instance.pk %}
+      {% if campo_form.instance.pk %}
         Editar
       {% else %}
         Adicionar
       {% endif %} Campo
     </h2>
-    <form id="campoForm" method="post" action="{% url 'campo_create' %}" enctype="multipart/form-data">
+    <form id="campoForm"
+      method="post"
+      action="{% if campo_form.instance.pk %}
+        {% url 'campo_update' campo_form.instance.pk %}
+      {% else %}
+        {% url 'campo_create' %}
+      {% endif %}"
+      enctype="multipart/form-data">
       {% csrf_token %}
-      {{ form.as_p }}
+
+      {% if campo_form.non_field_errors %}
+        <div class="errorlist">
+          <strong>Por favor, corrija os seguintes erros:</strong>
+          <ul>
+            {% for error in campo_form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <div>
+        <label for="id_nome">Nome:</label>
+        {{ campo_form.nome }}<br>
+        {% if campo_form.nome.errors %}
+          <div class="errorlist">
+            {% for error in campo_form.nome.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+        <label for="id_endereco">Endereço:</label>
+        {{ campo_form.endereco }}<br>
+        {% if campo_form.endereco.errors %}
+          <div class="errorlist">
+            {% for error in campo_form.endereco.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+        <label for="id_descricao">Descrição:</label>
+        {{ campo_form.descricao }}<br>
+        {% if campo_form.descricao.errors %}
+          <div class="errorlist">
+            {% for error in campo_form.descricao.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+        <label for="id_preco_hora">Preço por Hora:</label>
+        {{ campo_form.preco_hora }}<br>
+        {% if campo_form.preco_hora.errors %}
+          <div class="errorlist">
+            {% for error in campo_form.preco_hora.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <label for="id_cidade">Cidade:</label>
+        {{ campo_form.cidade }}<br>
+        {% if campo_form.cidade.errors %}
+          <div class="errorlist">
+            {% for error in campo_form.cidade.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <label for="id_tipo_gramado">Tipo de Gramado:</label>
+      <select name="tipo_gramado" id="id_tipo_gramado">
+        <option value="">Selecione</option>
+        <option value="natural" {% if campo_form.tipo_gramado.value == 'natural' %}selected{% endif %}>Natural</option>
+        <option value="sintetico" {% if campo_form.tipo_gramado.value == 'sintetico' %}selected{% endif %}>Sintético</option>
+      </select>
+
+      <label for="id_iluminacao">Com Iluminação:</label>
+      <input type="checkbox" name="iluminacao" id="id_iluminacao" value="True" {% if campo_form.iluminacao.value %}checked{% endif %} />
+
+      <label for="id_vestiarios">Com Vestiários:</label>
+      <input type="checkbox" name="vestiarios" id="id_vestiarios" value="True" {% if campo_form.vestiarios.value %}checked{% endif %} />
+
+      <h3>Fotos:</h3>
+      {{ formset.management_form }}
+      <div>
+        {% for form in formset.forms %}
+          <div>
+            {{ form.imagem.label }}<br>
+            {{ form.imagem }}<br>
+            {% if form.imagem.errors %}
+              <div class="errorlist">
+                {% for error in form.imagem.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </div>
+            {% endif %}
+            {% if form.instance.pk %}
+              <label>Excluir</label> {{ form.DELETE }}<br>
+              <button type="button" onclick="removeForm(this)">Remover</button>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
       <button type="submit">Salvar</button>
     </form>
+
     <script src="{% static 'campos/js/campos_form.js' %}"></script>
-</body>
+    <script>
+      function removeForm(button) {
+          // Remove o formulário correspondente
+          const formDiv = button.parentNode;
+          formDiv.style.display = 'none'; // Oculta o formulário em vez de removê-lo
+          formDiv.querySelector('input[type="checkbox"]').checked = true; // Marca o checkbox de exclusão
+      }
+    </script>
+  </body>
 </html>

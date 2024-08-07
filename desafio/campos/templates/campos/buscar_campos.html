@@ -10,10 +10,30 @@
     <h2>Buscar Campos</h2>
     <form method="get" action="{% url 'busca_campos' %}">
         <input type="text" name="q" value="{{ query }}" placeholder="Pesquisar por nome, endereço ou descrição" />
+        
+        <select name="tipo_gramado">
+            <option value="">Tipo de Gramado</option>
+            <option value="natural" {% if tipo_gramado == 'natural' %}selected{% endif %}>Natural</option>
+            <option value="sintetico" {% if tipo_gramado == 'sintetico' %}selected{% endif %}>Sintético</option>
+        </select>
+        
+        <label>
+            <input type="checkbox" name="iluminacao" {% if iluminacao %}checked{% endif %} />
+            Com Iluminação
+        </label>
+        
+        <label>
+            <input type="checkbox" name="vestiarios" {% if vestiarios %}checked{% endif %} />
+            Com Vestiários
+        </label>
+        
+        <input type="text" name="cidade" value="{{ cidade }}" placeholder="Cidade" />  
         <button type="submit">Pesquisar</button>
     </form>
+    
 
     <h3>Resultados:</h3>
+
     <ul>
         {% for campo in campos %}
             <li>
@@ -21,10 +41,13 @@
                 Endereço: {{ campo.endereco }}<br>
                 Descrição: {{ campo.descricao }}<br>
                 Preço por Hora: R$ {{ campo.preco_hora }}<br>
+                Dono: {{ campo.locador.get_full_name }}<br>
+                Cidade: {{campo.cidade}}
             </li>
         {% empty %}
             <li>Nenhum campo encontrado.</li>
         {% endfor %}
     </ul>
+    
 </body>
 </html>
