@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Buscar Campos</title>
+    <link rel="stylesheet" href="{% static 'campos/css/campos_form.css' %}" />
+</head>
+<body>
+    <h2>Buscar Campos</h2>
+    <form method="get" action="{% url 'busca_campos' %}">
+        <input type="text" name="q" value="{{ query }}" placeholder="Pesquisar por nome, endereço ou descrição" />
+        <button type="submit">Pesquisar</button>
+    </form>
+
+    <h3>Resultados:</h3>
+    <ul>
+        {% for campo in campos %}
+            <li>
+                <strong>{{ campo.nome }}</strong><br>
+                Endereço: {{ campo.endereco }}<br>
+                Descrição: {{ campo.descricao }}<br>
+                Preço por Hora: R$ {{ campo.preco_hora }}<br>
+            </li>
+        {% empty %}
+            <li>Nenhum campo encontrado.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

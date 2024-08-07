@@ -1,0 +1,7 @@
+  <h2>Deletar Campo</h2>
+  <p>Tem certeza que deseja deletar "{{ campo.nome }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar</button>
+  </form>
+  <a href="{% url 'campo_list' %}">Cancelar</a>

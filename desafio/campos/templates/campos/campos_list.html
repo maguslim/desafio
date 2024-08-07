@@ -1,0 +1,15 @@
+  <h2>Meus Campos</h2>
+  <a href="{% url 'campo_create' %}">Adicionar Novo Campo</a>
+  <ul>
+    {% for campo in campos %}
+      <li>
+        {{ campo.nome }} - <a href="{% url 'campo_update' campo.pk %}">Editar</a> - 
+        <a href="{% url 'campo_delete' campo.pk %}">Deletar</a>
+      </li>
+      {% for foto in campo.fotos.all %}
+      <li>
+        <img src="{{ foto.imagem.url }}" alt="Foto de {{ campo.nome }}" style="max-width: 200px;">
+      </li>
+    {% endfor %}
+    {% endfor %}
+  </ul>

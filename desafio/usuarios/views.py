@@ -14,6 +14,7 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm, VerificationForm, PasswordResetRequestForm, PasswordResetVerifyForm, PasswordResetCompleteForm, UserForm, UserProfileForm
 from .models import UserProfile
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import random
 
 
@@ -171,11 +172,11 @@ class PasswordResetCompleteView(View):
         user = get_object_or_404(User, id=user_id)
         form = PasswordResetCompleteForm(user=user, data=request.POST)
         
-        print(f"Form data received: {request.POST}")  # Imprime os dados recebidos pelo formulário
+        print(f"Form data received: {request.POST}")  
         
         if form.is_valid():
             form.save()
-            print(f"Password set for user {user.username}: {user.password}")  # Imprime a senha criptografada
+            print(f"Password set for user {user.username}: {user.password}")  
             messages.success(request, 'Senha redefinida com sucesso!')
             del request.session['reset_user_id']
             return redirect('login')
@@ -183,6 +184,8 @@ class PasswordResetCompleteView(View):
         return render(request, 'usuarios/password_reset_complete.html', {'form': form})
     
     
+
+
 
 @login_required
 def profile_view(request):
@@ -195,15 +198,19 @@ def profile_view(request):
 
         if 'remove_picture' in request.POST:
             if user_profile.profile_picture:
-                user_profile.profile_picture.delete(save=False)   
-                user_profile.profile_picture = None  
-                user_profile.save()  
+                user_profile.profile_picture.delete(save=False)
+                user_profile.profile_picture = None
+                user_profile.save()
+                messages.success(request, 'Sua foto de perfil foi removida com sucesso.')
             return redirect('profile')
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            messages.success(request, 'Seu perfil foi atualizado com sucesso.')
             return redirect('profile')
+        else:
+            messages.error(request, 'Por favor, corrija os erros abaixo.')
 
     else:
         user_form = UserForm(instance=user)
@@ -212,6 +219,7 @@ def profile_view(request):
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
-        'user_profile': user_profile
+        'user_profile': user_profile,
+        'is_editable': request.user.is_authenticated,
     }
     return render(request, 'usuarios/profile.html', context)

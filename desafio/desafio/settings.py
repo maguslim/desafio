@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'usuarios',
     'home',
+    'campos',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -146,6 +147,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'home/static'),
     os.path.join(BASE_DIR, 'usuarios/static'),
+    os.path.join(BASE_DIR, 'campos/static'),
 ] 
 STATIC_ROOT = '/var/www/staticfiles'
 

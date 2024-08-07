@@ -35,7 +35,7 @@ class CustomUserCreationForm(UserCreationForm):
             },
             'password2': {
                 'required': 'Este campo é obrigatório.',
-                'password_mismatch': 'As senhas não coincidem.',  # Ajuste a mensagem de erro aqui
+                'password_mismatch': 'As senhas não coincidem.',  
             },
         }
 
@@ -97,7 +97,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['phone_number', 'profile_picture']
+        fields = ['phone_number', 'profile_picture', 'is_locador']
 
 
 class UserForm(forms.ModelForm):

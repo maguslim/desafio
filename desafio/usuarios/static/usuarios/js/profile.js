@@ -4,22 +4,28 @@ function toggleEditMode() {
     const saveButton = document.querySelector('.save-button');
     const editButton = document.querySelector('.edit-button');
     const profilePictureButton = document.querySelector('.profile-picture-button');
+    const profilePictureInput = document.getElementById('id_profile_picture');
     const removePictureButton = document.querySelector('.btn-danger');
-    
+    const locadorCheckbox = document.getElementById('id_is_locador');
+
     if (editCheckbox.checked) {
         editCheckbox.checked = false;
         formControls.forEach(control => control.setAttribute('readonly', true));
         profilePictureButton.setAttribute('disabled', true);
+        profilePictureInput.setAttribute('disabled', true);
         saveButton.style.display = 'none';
         editButton.style.display = 'block';
         if (removePictureButton) removePictureButton.setAttribute('disabled', true);
+        locadorCheckbox.setAttribute('disabled', true);
     } else {
         editCheckbox.checked = true;
         formControls.forEach(control => control.removeAttribute('readonly'));
         profilePictureButton.removeAttribute('disabled');
+        profilePictureInput.removeAttribute('disabled');
         saveButton.style.display = 'block';
         editButton.style.display = 'none';
         if (removePictureButton) removePictureButton.removeAttribute('disabled');
+        locadorCheckbox.removeAttribute('disabled');
     }
 }
 

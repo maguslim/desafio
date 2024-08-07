@@ -8,6 +8,8 @@ class UserProfile(models.Model):
     verification_code = models.CharField(max_length=6, blank=True, null=True)
     reset_code = models.CharField(max_length=6, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    is_locador = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.user.username

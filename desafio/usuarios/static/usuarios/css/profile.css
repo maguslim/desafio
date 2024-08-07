@@ -158,3 +158,12 @@ select:focus {
 .form-control[readonly] {
     background-color: #e9ecef; /* Cor para campos readonly */
 }
+
+
+.form-check-input {
+    margin-left: 0.25em;
+}
+
+.form-check-label {
+    margin-left: 1em;
+}
