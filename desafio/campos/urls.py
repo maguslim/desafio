@@ -9,6 +9,8 @@ urlpatterns = [
     path('NovoCampo/', views.campo_create, name='campo_create'),
     path('<int:pk>/editar/', views.campo_update, name='campo_update'),
     path('<int:pk>/deletar/', views.campo_delete, name='campo_delete'),
+    path('campo/<int:campo_id>/reservar', views.reservar_campo, name='reservar_campo'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

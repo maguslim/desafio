@@ -4,10 +4,42 @@
 <head>
     <meta charset="UTF-8" />
     <title>Buscar Campos</title>
+    <link rel="stylesheet" href=" {% static 'home/css/home.css' %} ">
     <link rel="stylesheet" href="{% static 'campos/css/campos_form.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 </head>
 <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'home' %}">CampoFácil</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+          <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">CampoFácil</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="{% url 'profile' %}">Meu Perfil</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="{% url 'logout' %}">Logout</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </nav>
+  
     <h2>Buscar Campos</h2>
+    <div id="map"></div>
     <form method="get" action="{% url 'busca_campos' %}">
         <input type="text" name="q" value="{{ query }}" placeholder="Pesquisar por nome, endereço ou descrição" />
         
@@ -30,10 +62,8 @@
         <input type="text" name="cidade" value="{{ cidade }}" placeholder="Cidade" />  
         <button type="submit">Pesquisar</button>
     </form>
-    
 
     <h3>Resultados:</h3>
-
     <ul>
         {% for campo in campos %}
             <li>
@@ -42,12 +72,20 @@
                 Descrição: {{ campo.descricao }}<br>
                 Preço por Hora: R$ {{ campo.preco_hora }}<br>
                 Dono: {{ campo.locador.get_full_name }}<br>
-                Cidade: {{campo.cidade}}
+                Cidade: {{ campo.cidade }}<br>
+                <a href="{% url 'reservar_campo' campo.id %}?preco_hora={{ campo.preco_hora }}" class="btn btn-primary">Reservar</a>
             </li>
         {% empty %}
             <li>Nenhum campo encontrado.</li>
         {% endfor %}
     </ul>
+
+    <footer class="bg-dark text-center text-lg-start">
+        <div class="text-center p-3" style="color: white;">© 2024 Copyright:</div>
+    </footer>
+
     
+    <script src="{% static 'campos/js/buscar_campos.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

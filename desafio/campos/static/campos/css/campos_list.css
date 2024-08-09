@@ -1,0 +1,13 @@
+.btn-no-hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.btn-no-hover:hover {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+a:hover{
+    color: greenyellow !important;
+}

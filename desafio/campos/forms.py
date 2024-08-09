@@ -1,5 +1,5 @@
 from django import forms
-from .models import Campo, CampoFoto
+from .models import Campo, CampoFoto, Reserva
 from django.forms import modelformset_factory
 
 
@@ -36,3 +36,17 @@ class BuscaCampoForm(forms.Form):
     iluminacao = forms.BooleanField(required=False, label='Com Iluminação')
     vestiarios = forms.BooleanField(required=False, label='Com Vestiários')
     cidade = forms.CharField(required=False, label='Cidade') 
+    
+
+
+class ReservaForm(forms.ModelForm):
+    class Meta:
+        model = Reserva
+        fields = ['data_reserva','hora_inicio','hora_fim']
+    
+    
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields['data_reserva'].widget = forms.DateInput(attrs={'type': 'date'})
+        self.fields['hora_inicio'].widget = forms.TimeInput(attrs={'type': 'time'})
+        self.fields['hora_fim'].widget = forms.TimeInput(attrs={'type': 'time'})
